@@ -9,10 +9,16 @@ services:
             - ./docker/nginx/conf.d:/etc/nginx/conf.d
         depends_on:
             - app
+        container_name: trust.network.nginx
+
     app:
-        image: php:8.1-fpm
+        build:
+            context: .
+            dockerfile: docker/app/Dockerfile
         volumes:
             - ./:/var/www
+        container_name: trust.network.app
+
     neo4j:
         image: neo4j:latest
         ports:
@@ -26,3 +32,4 @@ services:
             - ./storage/neo4j/data:/data
             - ./storage/neo4j/logs:/logs
             - ./storage/neo4j/plugins:/plugins
+        container_name: trust.network.neo4j
