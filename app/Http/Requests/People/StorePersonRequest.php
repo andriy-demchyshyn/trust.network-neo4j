@@ -23,6 +23,9 @@ class StorePersonRequest extends FormRequest
      */
     public function rules()
     {
-        return [];
+        return [
+            'id' => 'required|string',
+            'topics' => 'required|array',
+        ];
     }
 }
