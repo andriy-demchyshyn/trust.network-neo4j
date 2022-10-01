@@ -35,6 +35,12 @@ return [
 
     'connections' => [
 
+        'neo4j' => [
+            'host' => env('NEO4J_HOST', 'trust.network.neo4j'),
+            'login' => env('NEO4J_LOGIN', 'neo4j'),
+            'password' => env('NEO4J_PASSWORD', 'password'),
+        ],
+
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
