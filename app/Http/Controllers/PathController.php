@@ -51,28 +51,24 @@ class PathController extends Controller
         }
 
         $shortest_path = [];
-        $min_length = 0;
         foreach ($query->getResults() as $item) {
             $path_length = $item->get('path_length');
-            if (!empty($min_length) && $path_length >= $min_length) {
+            if (!empty($shortest_path) && $path_length >= count($shortest_path)) {
                 continue;
             }
 
-            $min_length = $path_length;
+            $shortest_path = [];
             $path_nodes = $item->get('nodes');
-            $path_persons = [];
             foreach ($path_nodes as $path_node) {
                 if ($path_node->getProperty('id') === $request->safe()->from_person_id) {
                     continue;
                 }
-                $path_persons[] = $path_node->getProperty('id');
+                $shortest_path[] = $path_node->getProperty('id');
             }
-            $shortest_path = [
-                'from' => $request->safe()->from_person_id,
-                'path' => $path_persons,
-            ];
         }
 
-        return response()->json($shortest_path, 201);
+        return !empty($shortest_path) 
+            ? response()->json(['from' => $request->safe()->from_person_id, 'path' => $shortest_path], 201) 
+            : abort(404, 'Message is not sent');
     }
 }
