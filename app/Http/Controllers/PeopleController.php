@@ -44,10 +44,10 @@ class PeopleController extends Controller
             CREATE (person:People {id: $id, topics: $topics})
             RETURN person
             CYPHER, ['id' => $request->safe()->id, 'topics' => $request->safe()->topics]);
-
-            return response()->json($query->first()->get('person')->getProperties(), 201);
         } catch (\Exception $e) {
             abort(422, 'Person already exists');
         }
+
+        return response()->json($query->first()->get('person')->getProperties(), 201);
     }
 }
