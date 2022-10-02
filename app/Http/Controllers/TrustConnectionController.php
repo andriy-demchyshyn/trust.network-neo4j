@@ -47,10 +47,14 @@ class TrustConnectionController extends Controller
             ON MATCH SET
                 trust.level = coalesce($data[friend.id], 0)
             CYPHER, ['person_id' => $person_id, 'data' => $request->all()]);
-
-            return response()->json($query->getSummary()->getCounters()->propertiesSet(), 201);
         } catch (\Exception $e) {
             abort(422, 'Unprocessable request data');
         }
+
+        $affected_connections = $query->getSummary()->getCounters()->propertiesSet();
+
+        return $affected_connections > 0 
+            ? response()->json($affected_connections, 201) 
+            : abort(404, 'No connections created');
     }
 }
