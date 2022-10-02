@@ -56,17 +56,17 @@ class MessageController extends Controller
                 'from_person_id' => $request->safe()->from_person_id,
                 'min_trust_level' => $request->safe()->min_trust_level
             ]);
-
-            $results = [];
-            foreach ($query as $item) {
-                $results[] = $item->get('receiver_id');
-            }
-
-            return !empty($results) 
-                ? response()->json([$request->safe()->from_person_id => $results], 201) 
-                : response('Not found', 404);
         } catch (\Exception $e) {
             abort(422, $e->getMessage());
         }
+
+        $results = [];
+        foreach ($query as $item) {
+            $results[] = $item->get('receiver_id');
+        }
+
+        return !empty($results) 
+            ? response()->json([$request->safe()->from_person_id => $results], 201) 
+            : response('Not found', 404);
     }
 }
