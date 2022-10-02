@@ -32,25 +32,25 @@ class TrustConnectionController extends Controller
      */
     public function store(StoreTrustConnectionsRequest $request, string $person_id)
     {
-        if (empty($request->all()) || !is_array($request->all())) {
-            abort(422);
+        if (empty($request->all())) {
+            abort(404, 'Empty request');
         }
 
-        $request_validated = array_filter($request->all(), function($value, $key) {
-            return !empty($key) && is_numeric($value) && $value >= 1 && $value <= 10;
-        }, ARRAY_FILTER_USE_BOTH);
+        try {
+            $query = $this->neo4j->run(<<<'CYPHER'
+            MATCH (me:People {id: $person_id})
+            MATCH (friend:People)
+            WHERE friend.id IN keys($data)
+            MERGE (me)-[trust:TRUSTS]->(friend)
+            ON CREATE SET
+                trust.level = coalesce($data[friend.id], 0)
+            ON MATCH SET
+                trust.level = coalesce($data[friend.id], 0)
+            CYPHER, ['person_id' => $person_id, 'data' => $request->all()]);
 
-        $query = $this->neo4j->run(<<<'CYPHER'
-        MATCH (me:People {id: $person_id})
-        MATCH (friend:People)
-        WHERE friend.id IN keys($data)
-        MERGE (me)-[trust:TRUSTS]->(friend)
-        ON CREATE SET
-            trust.level = coalesce($data[friend.id], 0)
-        ON MATCH SET
-            trust.level = coalesce($data[friend.id], 0)
-        CYPHER, ['person_id' => $person_id, 'data' => $request_validated]);
-
-        return response()->json($query->getSummary()->getCounters()->propertiesSet(), 201);
+            return response()->json($query->getSummary()->getCounters()->propertiesSet(), 201);
+        } catch (\Exception $e) {
+            abort(422, 'Unprocessable request data');
+        }
     }
 }
