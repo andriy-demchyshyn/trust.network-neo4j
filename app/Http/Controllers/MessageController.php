@@ -7,10 +7,26 @@ use App\Http\Requests\Message\ShowMessageRequest;
 use App\Http\Requests\Message\StoreMessageRequest;
 use App\Http\Requests\Message\UpdateMessageRequest;
 use App\Http\Requests\Message\DestroyMessageRequest;
-use Illuminate\Http\Request;
+use App\Services\Neo4jClient;
 
 class MessageController extends Controller
 {
+    /**
+     * Neo4j Client
+     */
+    protected $neo4j;
+
+    /**
+     * Create a new controller instance
+     * 
+     * @param  \App\Services\Neo4jClient
+     * @return void
+     */
+    public function __construct(Neo4jClient $neo4j)
+    {
+        $this->neo4j = $neo4j->connect();
+    }
+
     /**
      * Show messages
      * 
@@ -19,7 +35,7 @@ class MessageController extends Controller
      */
     public function index(ShowMessagesRequest $request)
     {
-        //
+        abort(403); // Method is not used yet, should be implemented in future
     }
 
     /**
@@ -31,7 +47,7 @@ class MessageController extends Controller
      */
     public function show(ShowMessageRequest $request, $id)
     {
-        //
+        abort(403); // Method is not used yet, should be implemented in future
     }
 
     /**
@@ -42,7 +58,41 @@ class MessageController extends Controller
      */
     public function store(StoreMessageRequest $request)
     {
-        //
+        $query = $this->neo4j->run(<<<'CYPHER'
+        MATCH (author:People {id: $from_person_id})
+        CREATE (message:Messages {
+            text: $text,
+            topics: $topics,
+            from_person_id: $from_person_id,
+            min_trust_level: $min_trust_level,
+            created_at: $created_at
+        })
+        CREATE (author)-[:CAN_VIEW]->(message)
+        WITH message
+        MATCH path = (author:People {id: $from_person_id}) - [:TRUSTS*] -> (receiver:People)
+        WHERE
+            receiver.id <> $from_person_id AND
+            all(trust IN relationships(path) WHERE trust.level >= $min_trust_level) AND
+            all(topic IN $topics WHERE topic IN receiver.topics)
+        WITH distinct receiver, message
+        CREATE (receiver)-[:CAN_VIEW]->(message)
+        return receiver.id as receiver_id
+        CYPHER, [
+            'text' => $request->safe()->text,
+            'topics' => $request->safe()->topics,
+            'from_person_id' => $request->safe()->from_person_id,
+            'min_trust_level' => $request->safe()->min_trust_level,
+            'created_at' => time()
+        ]);
+
+        $results = [];
+        foreach ($query as $item) {
+            $results[] = $item->get('receiver_id');
+        }
+
+        return [
+            $request->safe()->from_person_id => $results
+        ];
     }
 
     /**
@@ -54,7 +104,7 @@ class MessageController extends Controller
      */
     public function update(UpdateMessageRequest $request, $id)
     {
-        //
+        abort(403); // Method is not used yet, should be implemented in future
     }
 
     /**
@@ -66,6 +116,6 @@ class MessageController extends Controller
      */
     public function destroy(DestroyMessageRequest $request, $id)
     {
-        //
+        abort(403); // Method is not used yet, should be implemented in future
     }
 }
