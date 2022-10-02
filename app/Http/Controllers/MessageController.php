@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Message\ShowMessagesRequest;
-use App\Http\Requests\Message\ShowMessageRequest;
 use App\Http\Requests\Message\StoreMessageRequest;
-use App\Http\Requests\Message\UpdateMessageRequest;
-use App\Http\Requests\Message\DestroyMessageRequest;
 use App\Services\Neo4jClient;
 
 class MessageController extends Controller
@@ -25,29 +21,6 @@ class MessageController extends Controller
     public function __construct(Neo4jClient $neo4j)
     {
         $this->neo4j = $neo4j->connect();
-    }
-
-    /**
-     * Show messages
-     * 
-     * @param  \App\Http\Requests\Message\ShowMessagesRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function index(ShowMessagesRequest $request)
-    {
-        abort(403); // Method is not used yet, should be implemented in future
-    }
-
-    /**
-     * Show message
-     * 
-     * @param  \App\Http\Requests\Message\ShowMessageRequest  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ShowMessageRequest $request, $id)
-    {
-        abort(403); // Method is not used yet, should be implemented in future
     }
 
     /**
@@ -93,29 +66,5 @@ class MessageController extends Controller
         return response()->json([
             $request->safe()->from_person_id => $results,
         ], 201);
-    }
-
-    /**
-     * Update message
-     * 
-     * @param  \App\Http\Requests\Message\UpdateMessageRequest  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateMessageRequest $request, $id)
-    {
-        abort(403); // Method is not used yet, should be implemented in future
-    }
-
-    /**
-     * Remove message
-     * 
-     * @param  \App\Http\Requests\Message\DestroyMessageRequest  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(DestroyMessageRequest $request, $id)
-    {
-        abort(403); // Method is not used yet, should be implemented in future
     }
 }
