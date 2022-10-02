@@ -23,6 +23,11 @@ class StoreMessageRequest extends FormRequest
      */
     public function rules()
     {
-        return [];
+        return [
+            'text' => 'required|string',
+            'topics' => 'required|array',
+            'from_person_id' => 'required|string',
+            'min_trust_level' => 'required|integer|min:1|max:10',
+        ];
     }
 }
