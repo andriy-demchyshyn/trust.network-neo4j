@@ -81,7 +81,7 @@ class TrustConnectionController extends Controller
             trust.level = coalesce($data[friend.id], 0)
         CYPHER, ['person_id' => $person_id, 'data' => $request_validated]);
 
-        return $query->getSummary()->getCounters()->propertiesSet();
+        return response()->json($query->getSummary()->getCounters()->propertiesSet(), 201);
     }
 
     /**

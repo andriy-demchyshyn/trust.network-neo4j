@@ -73,7 +73,7 @@ class MessageController extends Controller
         WHERE
             receiver.id <> $from_person_id AND
             all(trust IN relationships(path) WHERE trust.level >= $min_trust_level) AND
-            all(topic IN $topics WHERE topic IN receiver.topics)
+            all(node IN nodes(path) WHERE all(topic IN $topics WHERE topic IN node.topics))
         WITH distinct receiver, message
         CREATE (receiver)-[:CAN_VIEW]->(message)
         return receiver.id as receiver_id
@@ -90,9 +90,9 @@ class MessageController extends Controller
             $results[] = $item->get('receiver_id');
         }
 
-        return [
-            $request->safe()->from_person_id => $results
-        ];
+        return response()->json([
+            $request->safe()->from_person_id => $results,
+        ], 201);
     }
 
     /**

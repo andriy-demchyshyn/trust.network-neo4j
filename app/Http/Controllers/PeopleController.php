@@ -51,7 +51,7 @@ class PeopleController extends Controller
         MATCH (person:People {id: $id}) RETURN person
         CYPHER, ['id' => $person_id]);
 
-        return $query->first()->get('person')->getProperties();
+        return response()->json($query->first()->get('person')->getProperties(), 200);
     }
 
     /**
@@ -71,7 +71,7 @@ class PeopleController extends Controller
         RETURN person
         CYPHER, ['id' => $request->safe()->id, 'topics' => $request->safe()->topics]);
 
-        return $query->first()->get('person')->getProperties();
+        return response()->json($query->first()->get('person')->getProperties(), 201);
     }
 
     /**
