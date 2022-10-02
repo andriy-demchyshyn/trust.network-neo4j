@@ -21,6 +21,14 @@ class PeopleController extends Controller
     public function __construct(Neo4jClient $neo4j)
     {
         $this->neo4j = $neo4j->connect();
+
+        // FOR TESTING PURPOSES ONLY
+        // IN PRODUCTION CONSTRAINTS SHOULD BE CREATED MANUALLY, NOT PER EACH REQUEST
+        $this->neo4j->run(<<<'CYPHER'
+        CREATE CONSTRAINT unique_person_id IF NOT EXISTS
+        FOR (person:People)
+        REQUIRE person.id IS UNIQUE
+        CYPHER);
     }
 
     /**
@@ -31,15 +39,15 @@ class PeopleController extends Controller
      */
     public function store(StorePersonRequest $request)
     {
-        $query = $this->neo4j->run(<<<'CYPHER'
-        MERGE (person:People {id: $id})
-        ON CREATE SET
-            person.topics = $topics
-        ON MATCH SET
-            person.topics = person.topics + [topic IN $topics WHERE NOT topic IN person.topics]
-        RETURN person
-        CYPHER, ['id' => $request->safe()->id, 'topics' => $request->safe()->topics]);
+        try {
+            $query = $this->neo4j->run(<<<'CYPHER'
+            CREATE (person:People {id: $id, topics: $topics})
+            RETURN person
+            CYPHER, ['id' => $request->safe()->id, 'topics' => $request->safe()->topics]);
 
-        return response()->json($query->first()->get('person')->getProperties(), 201);
+            return response()->json($query->first()->get('person')->getProperties(), 201);
+        } catch (\Exception $e) {
+            abort(422, 'Person already exists');
+        }
     }
 }
