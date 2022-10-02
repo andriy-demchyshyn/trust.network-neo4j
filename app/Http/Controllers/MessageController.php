@@ -57,7 +57,7 @@ class MessageController extends Controller
                 'min_trust_level' => $request->safe()->min_trust_level
             ]);
         } catch (\Exception $e) {
-            abort(422, $e->getMessage());
+            abort(422, 'Unprocessable request data');
         }
 
         $results = [];
@@ -67,6 +67,6 @@ class MessageController extends Controller
 
         return !empty($results) 
             ? response()->json([$request->safe()->from_person_id => $results], 201) 
-            : response('Not found', 404);
+            : abort(404, 'Message is not sent');
     }
 }
