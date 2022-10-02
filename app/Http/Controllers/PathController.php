@@ -31,21 +31,24 @@ class PathController extends Controller
      */
     public function store(StoreMessageRequest $request)
     {
-        $query = $this->neo4j->run(<<<'CYPHER'
-        MATCH path = shortestPath((author:People {id: $from_person_id}) - [:TRUSTS*] -> (receiver:People))
-        WHERE
-            receiver.id <> $from_person_id AND
-            all(trust IN relationships(path) WHERE trust.level >= $min_trust_level) AND
-            all(topic IN $topics WHERE topic IN receiver.topics)
-        WITH distinct receiver, path
-        return receiver.id as receiver_id, nodes(path) as nodes, length(path) as path_length
-        CYPHER, [
-            'text' => $request->safe()->text,
-            'topics' => $request->safe()->topics,
-            'from_person_id' => $request->safe()->from_person_id,
-            'min_trust_level' => $request->safe()->min_trust_level,
-            'created_at' => time()
-        ]);
+        try {
+            $query = $this->neo4j->run(<<<'CYPHER'
+            MATCH path = shortestPath((author:People {id: $from_person_id}) - [:TRUSTS*] -> (receiver:People))
+            WHERE
+                receiver.id <> $from_person_id AND
+                all(trust IN relationships(path) WHERE trust.level >= $min_trust_level) AND
+                all(topic IN $topics WHERE topic IN receiver.topics)
+            WITH distinct receiver, path
+            return receiver.id as receiver_id, nodes(path) as nodes, length(path) as path_length
+            CYPHER, [
+                'text' => $request->safe()->text,
+                'topics' => $request->safe()->topics,
+                'from_person_id' => $request->safe()->from_person_id,
+                'min_trust_level' => $request->safe()->min_trust_level,
+            ]);
+        } catch (\Exception $e) {
+            abort(422, 'Unprocessable request data');
+        }
 
         $shortest_path = [];
         $min_length = 0;
