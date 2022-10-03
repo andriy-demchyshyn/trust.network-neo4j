@@ -16,9 +16,9 @@ Over time, the functionality can be extended more and more
 - Laravel 9
 
 ## How to start service
-1. Start Docker Container: <code>docker-compose up -d</code>
-2. Enter terminal: <code>docker exec -it trust.network.app bash</code>
-3. Run in terminal: <code>composer install</code>
+1. Start Docker container: <code>docker-compose up -d</code>
+2. SSH connect to Docker container: <code>docker exec -it trust.network.app bash</code>
+3. Install composer dependencies. Run in terminal: <code>composer install</code>
 4. Run tests in terminal: <code>php artisan test</code>
 
 ## API Endpoints
