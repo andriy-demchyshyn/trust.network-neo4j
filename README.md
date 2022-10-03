@@ -1,5 +1,15 @@
 # Trust Network
 
+For this project I've decided to use Neo4j graph database, as it fits perfect for data structures described in task.
+
+Next steps:
+- add authentication
+- possibility to fully manage own profile, topics, trust connections and messages
+- possibility to reply to messages, probably something like comments, likes
+- recommendations system
+- private messaging
+Over time, the functionality can be extended more and more
+
 ## Stack
 - Neo4j Graph Database
 - PHP 8.1
