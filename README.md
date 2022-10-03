@@ -7,15 +7,15 @@
 
 ## How to start service
 1. Start Docker Container: <code>docker-compose up -d</code>
-2. Enter SSH: <code>docker exec -it trust.network.app bash</code>
-3. Run tests
+2. Enter terminal: <code>docker exec -it trust.network.app bash</code>
+3. Run tests in terminal: <code>php artisan test</code>
 
 ## API Endpoints
-- <code>POST: /api/people</code>\
+- POST: <code>http://127.0.0.1:8080/api/people</code>\
   <code>app\Http\Controllers\PeopleController::class, method: store</code>
-- <code>POST: /api/people/{person_id}/trust_connections</code>\
+- POST: <code>http://127.0.0.1:8080/api/people/{person_id}/trust_connections</code>\
   <code>app\Http\Controllers\TrustConnectionController::class, method: store</code>
-- <code>POST: /api/messages</code>\
+- POST: <code>http://127.0.0.1:8080/api/messages</code>\
   <code>app\Http\Controllers\MessageController::class, method: store</code>
-- <code>POST: /api/path</code>\
+- POST: <code>http://127.0.0.1:8080/api/path</code>\
   <code>app\Http\Controllers\PathController::class, method: findShortestPath</code>
