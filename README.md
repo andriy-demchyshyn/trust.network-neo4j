@@ -14,13 +14,13 @@
 ## API Endpoints
 - <b>POST:</b> <code>http\://127.0.0.1:8080/api/people</code>\
   PHP Class: <code>app\Http\Controllers\PeopleController::class</code>\
-  Method: <code>store</code>\
+  Method: <code>store</code>
 - <b>POST:</b> <code>http\://127.0.0.1:8080/api/people/{person_id}/trust_connections</code>\
   PHP Class: <code>app\Http\Controllers\TrustConnectionController::class</code>\
-  Method: <code>store</code>\
+  Method: <code>store</code>
 - <b>POST:</b> <code>http\://127.0.0.1:8080/api/messages</code>\
   PHP Class: <code>app\Http\Controllers\MessageController::class</code>\
-  Method: <code>store</code>\
+  Method: <code>store</code>
 - <b>POST:</b> <code>http\://127.0.0.1:8080/api/path</code>\
   PHP Class: <code>app\Http\Controllers\PathController::class</code>\
-  Method: <code>findShortestPath</code>\
+  Method: <code>findShortestPath</code>
