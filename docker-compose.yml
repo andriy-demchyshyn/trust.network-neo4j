@@ -9,7 +9,6 @@ services:
             - ./docker/nginx/conf.d:/etc/nginx/conf.d
         depends_on:
             - app
-            - neo4j
         container_name: trust.network.nginx
 
     app:
@@ -18,6 +17,8 @@ services:
             dockerfile: docker/app/Dockerfile
         volumes:
             - ./:/var/www
+        depends_on:
+            - neo4j
         container_name: trust.network.app
 
     neo4j:
