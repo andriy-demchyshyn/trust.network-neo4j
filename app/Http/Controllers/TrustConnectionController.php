@@ -55,6 +55,6 @@ class TrustConnectionController extends Controller
 
         return $affected_connections > 0 
             ? response()->json($affected_connections, 201) 
-            : abort(404, 'No connections created');
+            : abort(404, 'Person not found');
     }
 }
