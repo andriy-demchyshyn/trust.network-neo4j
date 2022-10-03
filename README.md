@@ -18,4 +18,4 @@
 - <code>POST: /api/messages</code>\
   <code>app\Http\Controllers\MessageController::class, method: store</code>
 - <code>POST: /api/path</code>\
-  <code>app\Http\Controllers\PathController::class, method: store</code>
+  <code>app\Http\Controllers\PathController::class, method: findShortestPath</code>
