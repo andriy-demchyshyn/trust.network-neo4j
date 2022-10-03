@@ -55,7 +55,7 @@ class PathController extends Controller
 
         return !empty($shortest_path) 
             ? response()->json(['from' => $request->safe()->from_person_id, 'path' => $shortest_path], 201) 
-            : abort(404, 'Message is not sent');
+            : abort(404, 'Path not found');
     }
 
     /**
