@@ -41,13 +41,21 @@ class PeopleController extends Controller
     {
         try {
             $query = $this->neo4j->run(<<<'CYPHER'
-            CREATE (person:People {id: $id, topics: $topics})
-            RETURN person
+            MERGE (person:People {id: $id})
+            ON CREATE SET
+                person.topics = $topics
+            ON MATCH SET
+                person.already_exists = 1
+            WITH person, person.already_exists AS person_already_exists
+            REMOVE person.already_exists
+            RETURN person, person_already_exists
             CYPHER, ['id' => $request->safe()->id, 'topics' => $request->safe()->topics]);
         } catch (\Exception $e) {
-            abort(422, 'Person already exists');
+            abort(422, 'Unprocessable request data');
         }
 
-        return response()->json($query->first()->get('person')->getProperties(), 201);
+        return $query->first()->get('person_already_exists') == 0
+            ? response()->json($query->first()->get('person')->getProperties(), 201)
+            : abort(422, 'Person already exists');
     }
 }
