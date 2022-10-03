@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Message\StoreMessageRequest;
 use App\Services\Neo4jClient;
+use Illuminate\Http\Request;
 
 class PathController extends Controller
 {
@@ -24,12 +25,12 @@ class PathController extends Controller
     }
 
     /**
-     * Store message with shortest path
+     * Find shortest path
      * 
      * @param  \App\Http\Requests\Message\ShowMessagesRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreMessageRequest $request)
+    public function findShortestPath(StoreMessageRequest $request)
     {
         try {
             $query = $this->neo4j->run(<<<'CYPHER'
@@ -50,6 +51,22 @@ class PathController extends Controller
             abort(422, 'Unprocessable request data');
         }
 
+        $shortest_path = $this->selectShortestPath($request, $query);
+
+        return !empty($shortest_path) 
+            ? response()->json(['from' => $request->safe()->from_person_id, 'path' => $shortest_path], 201) 
+            : abort(404, 'Message is not sent');
+    }
+
+    /**
+     * Select shortest path
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $query
+     * @return array
+     */
+    protected function selectShortestPath(Request $request, mixed $query): array
+    {
         $shortest_path = [];
         foreach ($query->getResults() as $item) {
             $path_length = $item->get('path_length');
@@ -67,8 +84,6 @@ class PathController extends Controller
             }
         }
 
-        return !empty($shortest_path) 
-            ? response()->json(['from' => $request->safe()->from_person_id, 'path' => $shortest_path], 201) 
-            : abort(404, 'Message is not sent');
+        return $shortest_path;
     }
 }
