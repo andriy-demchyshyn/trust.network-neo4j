@@ -21,14 +21,6 @@ class PeopleController extends Controller
     public function __construct(Neo4jClient $neo4j)
     {
         $this->neo4j = $neo4j->connect();
-
-        // FOR TESTING PURPOSES ONLY
-        // IN PRODUCTION CONSTRAINTS SHOULD BE CREATED MANUALLY, NOT PER EACH REQUEST
-        $this->neo4j->run(<<<'CYPHER'
-        CREATE CONSTRAINT unique_person_id IF NOT EXISTS
-        FOR (person:People)
-        REQUIRE person.id IS UNIQUE
-        CYPHER);
     }
 
     /**
