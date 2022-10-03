@@ -11,7 +11,7 @@
 3. Run tests in terminal: <code>php artisan test</code>
 
 ## API Endpoints
-- POST: <code>http://127.0.0.1:8080/api/people</code>\
+- POST: <code>http\://127.0.0.1:8080/api/people</code>\
   <code>app\Http\Controllers\PeopleController::class, method: store</code>
 - POST: <code>http://127.0.0.1:8080/api/people/{person_id}/trust_connections</code>\
   <code>app\Http\Controllers\TrustConnectionController::class, method: store</code>
