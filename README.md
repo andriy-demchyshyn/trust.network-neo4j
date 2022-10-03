@@ -11,11 +11,14 @@
 3. Run tests
 
 ## API Endpoints
-- <code>POST: /api/people</code>
-  <code>app\Http\Controllers\PeopleController::class, method: store</code>
-- <code>POST: /api/people/{person_id}/trust_connections</code>
-  <code>app\Http\Controllers\TrustConnectionController::class, method: store</code>
-- <code>POST: /api/messages</code>
-  <code>app\Http\Controllers\MessageController::class, method: store</code>
-- <code>POST: /api/path</code>
-  <code>app\Http\Controllers\PathController::class, method: store</code>
+<code>POST: /api/people</code>
+<code>app\Http\Controllers\PeopleController::class, method: store</code>
+
+<code>POST: /api/people/{person_id}/trust_connections</code>
+<code>app\Http\Controllers\TrustConnectionController::class, method: store</code>
+
+<code>POST: /api/messages</code>
+<code>app\Http\Controllers\MessageController::class, method: store</code>
+
+<code>POST: /api/path</code>
+<code>app\Http\Controllers\PathController::class, method: store</code>
