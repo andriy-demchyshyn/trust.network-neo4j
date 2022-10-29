@@ -13,7 +13,7 @@ Let's model information flow in our computer. The main entities are
 
 We can build a model of trust network using straightforward REST API:
 
-### Add people:
+<b>Add people:</b>
 ```
 POST: http://127.0.0.1:8080/api/people
 
@@ -30,7 +30,7 @@ Response 201:
 }
 ```
 
-### Update or create trust connections:
+<b>Update or create trust connections:</b>
 ```
 POST: http://127.0.0.1:8080/api/{id}/trust_connections
 
@@ -43,7 +43,7 @@ POST body (hash pair with person_id - trust level):
 Response 201
 ```
 
-### The main work is a sending messages (question, search for expertise, etc), which should have form:
+<b>The main work is a sending messages (question, search for expertise, etc), which should have form:</b>
 ```
 POST: http://127.0.0.1:8080/api/messages
 
@@ -63,7 +63,7 @@ Response 201
 }
 ```
 
-### Bonus: implement delivery of non-broadcast message, where receiver should have topics listed in requests, intermediate nodes can not have topics, listed in request
+<b>Bonus: implement delivery of non-broadcast message, where receiver should have topics listed in requests, intermediate nodes can not have topics, listed in request</b>
 ```
 POST: http://127.0.0.1:8080/api/path
 
