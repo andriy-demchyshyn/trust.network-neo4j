@@ -55,7 +55,9 @@ POST body (hash pair with person_id - trust level):
     "min_trust_level": 5
 }
 
-Response should trace message delivery through the network based on people topics and trust connection levels. Each person should receive this message only one time and not be spammed. All persons who receive a message must have appropriate topics. Note, that message is send broadcasted to all.
+Response should trace message delivery through the network based on people topics and trust connection levels. 
+Each person should receive this message only one time and not be spammed. 
+All persons who receive a message must have appropriate topics. Note, that message is send broadcasted to all.
 
 Response 201
 {
@@ -75,14 +77,16 @@ POST body (hash pair with person_id - trust level):
     "min_trust_level": 5
 }
 
-This message should find an receiver, which have appropriate topics in attributes. All participants in the path should be connected with a trust-level of 5 or more.
+This message should find an receiver, which have appropriate topics in attributes. 
+All participants in the path should be connected with a trust-level of 5 or more.
 
 Response 201
 {
     "from": "Garry",
     "path": ["Hermione"]
 }
-- the path from the message sender to the message receiver, including all intermediate agents. When we have more than one variant, we should return a shorter variant.
+Response is the path from the message sender to the message receiver, including all intermediate agents. 
+When we have more than one variant, we should return a shorter variant.
 ```
 
 ## Solution
